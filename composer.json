@@ -8,7 +8,7 @@
         "symfony/yaml": "^3.0"
     },
     "require-dev": {
-        "slim/slim": "^3.1",
+        "slim/slim": "^3.1"
     },
     "suggest": {
         "slim/slim": "To use this bridge, you have to install Slim Framework 3"
@@ -21,7 +21,9 @@
         }
     ],
     "autoload": {
-        "psr-4": ["Flexsounds\\Component\\SymfonyContainerSlimBridge\\", "src/"]
+        "psr-4": {
+            "Flexsounds\\Component\\SymfonyContainerSlimBridge\\": "src/"
+        }
     },
     "minimum-stability": "stable"
 }
