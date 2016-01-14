@@ -37,3 +37,20 @@ $app = new \Slim\App($container);
 $app->run();
 
 ````
+
+Now you can create a `config.yml` file to load your services, parameters, etc. [The use of importing other config files is also available.](http://symfony.com/doc/current/cookbook/configuration/configuration_organization.html#different-directories-per-environment) 
+
+```yml
+services:
+  my.custom.service:
+    class: Location\To\The\Class
+```
+
+Now the service `my.custom.service` is available in the container. Use `$this->get('my.custom.service')` to load the service.
+
+```php
+$app->get('/', function($request, $response){
+  $customService = $this->get('my.custom.service'); // $customService is now an instance of Location\To\The\Class()
+});
+```
+See the [symfony documentation](http://symfony.com/doc/current/book/service_container.html) on what other options are available.
