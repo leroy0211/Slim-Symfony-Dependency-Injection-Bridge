@@ -29,7 +29,7 @@ $app->run();
 
 ```php
 $container = new \Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder();
-$loader = $loader = new \Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \Symfony\Component\Config\FileLocator($configPath));
+$loader = $loader = new \Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \Symfony\Component\Config\FileLocator(__DIR__));
 $loader->load('config.yml');
 
 $app = new \Slim\App($container);
@@ -53,4 +53,9 @@ $app->get('/', function($request, $response){
   $customService = $this->get('my.custom.service'); // $customService is now an instance of Location\To\The\Class()
 });
 ```
-See the [symfony documentation](http://symfony.com/doc/current/book/service_container.html) on what other options are available.
+
+
+# Read more
+Read the [symfony service container documentation](http://symfony.com/doc/current/book/service_container.html) to find out what other options are available in the service container.
+
+Read the [symfony dependency injection documentation](http://symfony.com/doc/current/components/dependency_injection/introduction.html) to find out how the ContainerBuilder is used. Like settings default parameters.
