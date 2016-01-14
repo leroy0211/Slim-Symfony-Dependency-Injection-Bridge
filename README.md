@@ -58,4 +58,4 @@ $app->get('/', function($request, $response){
 # Read more
 Read the [symfony service container documentation](http://symfony.com/doc/current/book/service_container.html) to find out what other options are available in the service container.
 
-Read the [symfony dependency injection documentation](http://symfony.com/doc/current/components/dependency_injection/introduction.html) to find out how the ContainerBuilder is used. Like settings default parameters.
+Read the [symfony dependency injection documentation](http://symfony.com/doc/current/components/dependency_injection/introduction.html) to find out how the ContainerBuilder is used. Like setting default parameters.
