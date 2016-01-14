@@ -59,3 +59,6 @@ $app->get('/', function($request, $response){
 Read the [symfony service container documentation](http://symfony.com/doc/current/book/service_container.html) to find out what other options are available in the service container.
 
 Read the [symfony dependency injection documentation](http://symfony.com/doc/current/components/dependency_injection/introduction.html) to find out how the ContainerBuilder is used. Like setting default parameters.
+
+# Interesting to know
+If you use PhpStorm as IDE and add the Symfony Plugin, typehinting for services should be available. 
