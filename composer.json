@@ -3,15 +3,16 @@
     "description": "The bridge to use the Symfony Dependency Injection Container to use in Slim Framework 3",
     "type": "library",
     "require": {
-        "symfony/dependency-injection": "^3.0",
+        "php": ">=5.5.0",
+        "slim/slim": "^3.1",
+        "symfony/dependency-injection": "^3.0"
+    },
+    "require-dev": {
         "symfony/config": "^3.0",
         "symfony/yaml": "^3.0"
     },
-    "require-dev": {
-        "slim/slim": "^3.1"
-    },
     "suggest": {
-        "slim/slim": "To use this bridge, you have to install Slim Framework 3"
+        "symfony/config": "For using configuration to define the container"
     },
     "license": "MIT",
     "authors": [
