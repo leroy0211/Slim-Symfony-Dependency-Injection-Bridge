@@ -1,3 +1,7 @@
+[![Travis Build Status](https://img.shields.io/travis/leroy0211/Slim-Symfony-Dependency-Injection-Bridge/master.svg?maxAge=2592000?style=flat-square)](https://travis-ci.org/leroy0211/Slim-Symfony-Dependency-Injection-Bridge)
+[![Packagist](https://img.shields.io/packagist/v/flexsounds/slim-symfony-di-container.svg?maxAge=2592000?style=flat-square)](https://packagist.org/packages/flexsounds/slim-symfony-di-container)
+[![Packagist](https://img.shields.io/packagist/dt/flexsounds/slim-symfony-di-container.svg?maxAge=2592000?style=flat-square)](https://packagist.org/packages/flexsounds/slim-symfony-di-container)
+
 # Slim-Symfony-Dependency-Injection-Bridge
 Just a simple bridge to use the Symfony Dependency Injection Container to replace the Container in Slim Framework 3
 
