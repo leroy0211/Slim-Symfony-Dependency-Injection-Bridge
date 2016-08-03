@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: leroy
- * Date: 14/01/16
- * Time: 10:41
- */
 
 namespace Flexsounds\Component\SymfonyContainerSlimBridge;
-
 
 use Interop\Container\ContainerInterface;
 use Slim\CallableResolver;
@@ -22,6 +15,7 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Slim\Router;
 use Symfony\Component\DependencyInjection\ContainerBuilder as BaseContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ContainerBuilder extends BaseContainerBuilder implements ContainerInterface
 {

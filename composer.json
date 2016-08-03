@@ -9,7 +9,8 @@
     },
     "require-dev": {
         "symfony/config": "^3.0",
-        "symfony/yaml": "^3.0"
+        "symfony/yaml": "^3.0",
+        "phpunit/phpunit": "^4.8"
     },
     "suggest": {
         "symfony/config": "For using configuration to define the container"
