@@ -30,24 +30,43 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
     public function __construct(ParameterBagInterface $parameterBag = null)
     {
         parent::__construct($parameterBag);
-        $this->registerDefaultServices($this->defaultSettings);
+
+        foreach($this->defaultSettings as $key => $value){
+            if(!$this->getParameterBag()->has($key)){
+                $this->getParameterBag()->set($key, $value);
+            }
+        }
+
+        $this->registerDefaultServices();
     }
 
-    private function registerDefaultServices($settings)
+    private function registerDefaultServices()
     {
-        $this->set('settings', new Collection($settings));
+        $definition = $this->register('settings', Collection::class);
+        $definition->addArgument(array(
+            'httpVersion' => '%httpVersion%',
+            'responseChunkSize' => '%responseChunkSize%',
+            'outputBuffering' => '%outputBuffering%',
+            'determineRouteBeforeAppMiddleware' => '%determineRouteBeforeAppMiddleware%',
+            'displayErrorDetails' => '%displayErrorDetails%',
+        ));
 
         $this->set('environment', new Environment($_SERVER));
 
         $this->set('request', Request::createFromEnvironment($this->get('environment')));
 
-        $this->set('response', (new Response(200, new Headers(['Content-Type' => 'text/html; charset=UTF-8'])))->withProtocolVersion($settings['httpVersion']));
+        $this->register('response', Response::class)
+            ->addArgument(200)
+            ->addArgument(new Headers(['Content-Type' => 'text/html; charset=UTF-8']))
+            ->addMethodCall('withProtocolVersion', array('%httpVersion%'))
+            ;
 
         $this->set('router', new Router());
 
         $this->set('foundHandler', new RequestResponse());
 
-        $this->set('errorHandler', new Error($settings['displayErrorDetails']));
+        $this->register('errorHandler', Error::class)
+            ->addArgument('%displayErrorDetails%');
 
         $this->set('notFoundHandler', new NotFound());
 

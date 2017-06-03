@@ -2,6 +2,7 @@
 
 namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * Class ContainerBuilderTest
@@ -14,7 +15,8 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->container = new ContainerBuilder();
+        $container = new ContainerBuilder();
+        $this->container = $container;
     }
 
     /**
@@ -95,6 +97,18 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('1.1', $this->container->get('settings')['httpVersion']);
         $this->container->get('settings')['httpVersion'] = '1.2';
         $this->assertSame('1.2', $this->container->get('settings')['httpVersion']);
+    }
+
+    /**
+     * Test overriding settings on constructor
+     */
+    public function testOverrideSettingsOnConstruct()
+    {
+        $container = new ContainerBuilder(new ParameterBag(array(
+            'httpVersion' => "1.3"
+        )));
+
+        $this->assertSame('1.3', $container->get('settings')['httpVersion']);
     }
 
 }
