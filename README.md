@@ -27,13 +27,29 @@ $app = new \Slim\App($container);
 $app->run();
 ```
 
+# Default parameters
+The default Slim Framework Settings are 1 on 1 mapped with parameters. To overwrite the settings you can either create a new `ParameterBag` with your settings and pass it as the first argument to the `ContainerBuilder`. 
+Or if you use one of the file loaders, change them with the parameters config key. 
+
+Just change the parameters to your own choice to your config file like this.
+ 
+ ```
+ parameters:
+    httpVersion: "1.1"
+    responseChunkSize: 4096
+    outputBuffering: "append"
+    determineRouteBeforeAppMiddleware: false
+    displayErrorDetails: false
+ ```
+ 
+
 # Other Examples
 
 ## Example loading your dependencies through yaml configuration (The Symfony way)
 
 ```php
 $container = new \Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder();
-$loader = $loader = new \Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \Symfony\Component\Config\FileLocator(__DIR__));
+$loader = new \Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \Symfony\Component\Config\FileLocator(__DIR__));
 $loader->load('config.yml');
 
 $app = new \Slim\App($container);
