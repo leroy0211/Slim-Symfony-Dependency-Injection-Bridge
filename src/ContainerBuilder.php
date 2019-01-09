@@ -42,8 +42,8 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
 
     private function registerDefaultServices()
     {
-        $definition = $this->register('settings', Collection::class);
-        $definition->addArgument(array(
+        $this->register('settings', Collection::class)
+            ->addArgument(array(
             'httpVersion' => '%httpVersion%',
             'responseChunkSize' => '%responseChunkSize%',
             'outputBuffering' => '%outputBuffering%',
@@ -51,9 +51,12 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
             'displayErrorDetails' => '%displayErrorDetails%',
         ));
 
-        $this->set('environment', new Environment($_SERVER));
+        $this->register('environment', Environment::class)
+             ->addArgument($_SERVER);
 
-        $this->set('request', Request::createFromEnvironment($this->get('environment')));
+        $this->register('request', Request::class)
+            ->setFactory([Request::class, 'createFromEnvironment'])
+            ->addArgument($this->get('environment'));
 
         $this->register('response', Response::class)
             ->addArgument(200)
@@ -61,18 +64,18 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
             ->addMethodCall('withProtocolVersion', array('%httpVersion%'))
             ;
 
-        $this->set('router', new Router());
+        $this->register('router', Router::class);
 
-        $this->set('foundHandler', new RequestResponse());
+        $this->register('foundHandler', RequestResponse::class);
 
         $this->register('errorHandler', Error::class)
             ->addArgument('%displayErrorDetails%');
 
-        $this->set('notFoundHandler', new NotFound());
+        $this->register('notFoundHandler', NotFound::class);
 
-        $this->set('notAllowedHandler', new NotAllowed());
+        $this->register('notAllowedHandler', NotAllowed::class);
 
-        $this->set('callableResolver', new CallableResolver($this));
+        $this->register('callableResolver', CallableResolver::class)
+            ->addArgument($this);
     }
-
 }

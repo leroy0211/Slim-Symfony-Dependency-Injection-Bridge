@@ -1,7 +1,10 @@
 <?php
 
 namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
+
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
+use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Stubs\CustomRouter;
+use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
@@ -15,7 +18,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $container = new ContainerBuilder();
+        $container       = new ContainerBuilder();
         $this->container = $container;
     }
 
@@ -60,6 +63,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('\Psr\Http\Message\RequestInterface', $this->container->get('request'));
     }
+
     /**
      * Test container has response
      */
@@ -67,6 +71,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $this->container->get('response'));
     }
+
     /**
      * Test container has router
      */
@@ -74,6 +79,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('\Slim\Router', $this->container->get('router'));
     }
+
     /**
      * Test container has error handler
      */
@@ -81,6 +87,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('\Slim\Handlers\Error', $this->container->get('errorHandler'));
     }
+
     /**
      * Test container has error handler
      */
@@ -109,6 +116,17 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         )));
 
         $this->assertSame('1.3', $container->get('settings')['httpVersion']);
+    }
+
+    public function testCanOverwriteServicesFromLoaders()
+    {
+        $container = new ContainerBuilder();
+        $loader    = new ClosureLoader($container);
+        $loader->load(function (ContainerBuilder $container) {
+            $container->register('router', CustomRouter::class);
+        });
+
+        $this->assertInstanceOf(CustomRouter::class, $container->get('router'));
     }
 
 }
