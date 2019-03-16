@@ -31,8 +31,8 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
     {
         parent::__construct($parameterBag);
 
-        foreach($this->defaultSettings as $key => $value){
-            if(!$this->getParameterBag()->has($key)){
+        foreach ($this->defaultSettings as $key => $value) {
+            if (!$this->getParameterBag()->has($key)) {
                 $this->getParameterBag()->set($key, $value);
             }
         }
@@ -43,13 +43,13 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
     private function registerDefaultServices()
     {
         $this->register('settings', Collection::class)
-            ->addArgument(array(
+            ->addArgument([
             'httpVersion' => '%httpVersion%',
             'responseChunkSize' => '%responseChunkSize%',
             'outputBuffering' => '%outputBuffering%',
             'determineRouteBeforeAppMiddleware' => '%determineRouteBeforeAppMiddleware%',
             'displayErrorDetails' => '%displayErrorDetails%',
-        ));
+        ]);
 
         $this->register('environment', Environment::class)
              ->addArgument($_SERVER);
@@ -61,7 +61,7 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
         $this->register('response', Response::class)
             ->addArgument(200)
             ->addArgument(new Headers(['Content-Type' => 'text/html; charset=UTF-8']))
-            ->addMethodCall('withProtocolVersion', array('%httpVersion%'))
+            ->addMethodCall('withProtocolVersion', ['%httpVersion%'])
             ;
 
         $this->register('router', Router::class);

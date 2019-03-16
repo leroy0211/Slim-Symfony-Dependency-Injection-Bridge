@@ -111,9 +111,9 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testOverrideSettingsOnConstruct()
     {
-        $container = new ContainerBuilder(new ParameterBag(array(
+        $container = new ContainerBuilder(new ParameterBag([
             'httpVersion' => "1.3"
-        )));
+        ]));
 
         $this->assertSame('1.3', $container->get('settings')['httpVersion']);
     }
@@ -128,5 +128,4 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(CustomRouter::class, $container->get('router'));
     }
-
 }
