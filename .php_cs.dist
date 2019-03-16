@@ -1,0 +1,18 @@
+<?php
+
+$rules = [
+    '@PSR2' => true,
+    'strict_param' => true,
+    'array_syntax' => ['syntax' => 'short'],
+];
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude('tests/Stubs')
+    ->in(__DIR__)
+;
+
+return PhpCsFixer\Config::create()
+    ->setFinder($finder)
+    ->setRules($rules)
+    ->setRiskyAllowed(true)
+    ;
