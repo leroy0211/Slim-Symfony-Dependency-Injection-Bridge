@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
 
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
 use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Fixtures\CustomRouter;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
@@ -13,21 +16,22 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  * Class ContainerBuilderTest
  * @package Flexsounds\Component\SymfonyContainerSlimBridge\Tests
  */
-class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
+class ContainerBuilderTest extends TestCase
 {
     /** @var ContainerBuilder */
     private $container;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $container       = new ContainerBuilder();
         $this->container = $container;
+        $container->compile();
     }
 
     /**
      * Test if the container is from the Symfony Container Builder instance
      */
-    public function testInstanceOfSymfonyContainerBuilder()
+    public function testInstanceOfSymfonyContainerBuilder(): void
     {
         $this->assertInstanceOf('\Symfony\Component\DependencyInjection\ContainerBuilder', $this->container);
     }
@@ -35,7 +39,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test if the container is from the Interop Container Interface, Slim uses
      */
-    public function testInstanceOfSlimContainerInterface()
+    public function testInstanceOfSlimContainerInterface(): void
     {
         $this->assertInstanceOf('\Interop\Container\ContainerInterface', $this->container);
     }
@@ -43,7 +47,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test `get()` returns existing item
      */
-    public function testGet()
+    public function testGet(): void
     {
         $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
     }
@@ -51,7 +55,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test container has request
      */
-    public function testGetRequest()
+    public function testGetRequest(): void
     {
         $this->assertInstanceOf('\Psr\Http\Message\RequestInterface', $this->container->get('request'));
     }
@@ -59,7 +63,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test container has response
      */
-    public function testGetResponse()
+    public function testGetResponse(): void
     {
         $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $this->container->get('response'));
     }
@@ -67,7 +71,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test container has router
      */
-    public function testGetRouter()
+    public function testGetRouter(): void
     {
         $this->assertInstanceOf('\Slim\Router', $this->container->get('router'));
     }
@@ -75,7 +79,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test container has error handler
      */
-    public function testGetErrorHandler()
+    public function testGetErrorHandler(): void
     {
         $this->assertInstanceOf('\Slim\Handlers\Error', $this->container->get('errorHandler'));
     }
@@ -83,7 +87,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test container has error handler
      */
-    public function testGetNotAllowedHandler()
+    public function testGetNotAllowedHandler(): void
     {
         $this->assertInstanceOf('\Slim\Handlers\NotAllowed', $this->container->get('notAllowedHandler'));
     }
@@ -91,7 +95,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test settings can be edited
      */
-    public function testSettingsCanBeEdited()
+    public function testSettingsCanBeEdited(): void
     {
         $this->assertSame('1.1', $this->container->get('settings')['httpVersion']);
         $this->container->get('settings')['httpVersion'] = '1.2';
@@ -101,7 +105,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test overriding settings on constructor
      */
-    public function testOverrideSettingsOnConstruct()
+    public function testOverrideSettingsOnConstruct(): void
     {
         $container = new ContainerBuilder(new ParameterBag([
             'httpVersion' => "1.3"
@@ -110,18 +114,18 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('1.3', $container->get('settings')['httpVersion']);
     }
 
-    public function testCanOverwriteServicesFromLoaders()
+    public function testCanOverwriteServicesFromLoaders(): void
     {
         $container = new ContainerBuilder();
         $loader    = new ClosureLoader($container);
-        $loader->load(function (ContainerBuilder $container) {
+        $loader->load(function (ContainerBuilder $container): void {
             $container->register('router', CustomRouter::class);
         });
 
         $this->assertInstanceOf(CustomRouter::class, $container->get('router'));
     }
 
-    public function testCanDumpContainer()
+    public function testCanDumpContainer(): void
     {
         try {
             $dumper = new PhpDumper($this->container);
