@@ -4,6 +4,7 @@ namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
 
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
 use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Fixtures\CustomRouter;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
@@ -13,7 +14,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  * Class ContainerBuilderTest
  * @package Flexsounds\Component\SymfonyContainerSlimBridge\Tests
  */
-class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
+class ContainerBuilderTest extends TestCase
 {
     /** @var ContainerBuilder */
     private $container;
@@ -22,6 +23,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $container       = new ContainerBuilder();
         $this->container = $container;
+        $container->compile();
     }
 
     /**

@@ -44,6 +44,7 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
     private function registerDefaultServices()
     {
         $this->register('settings', Collection::class)
+            ->setPublic(true)
             ->addArgument([
             'httpVersion' => '%httpVersion%',
             'responseChunkSize' => '%responseChunkSize%',
@@ -53,9 +54,11 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
         ]);
 
         $this->register('environment', Environment::class)
+            ->setPublic(true)
              ->addArgument($_SERVER);
 
         $this->register('request', Request::class)
+            ->setPublic(true)
             ->setFactory([Request::class, 'createFromEnvironment'])
             ->addArgument(new Reference('environment'));
 
@@ -63,23 +66,30 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
             ->addArgument(['Content-Type' => 'text/html; charset=UTF-8']);
 
         $this->register('response', Response::class)
+            ->setPublic(true)
             ->addArgument(200)
             ->addArgument(new Reference('response.headers'))
             ->addMethodCall('withProtocolVersion', ['%httpVersion%'])
             ;
 
-        $this->register('router', Router::class);
+        $this->register('router', Router::class)
+            ->setPublic(true);
 
-        $this->register('foundHandler', RequestResponse::class);
+        $this->register('foundHandler', RequestResponse::class)
+            ->setPublic(true);
 
         $this->register('errorHandler', Error::class)
+            ->setPublic(true)
             ->addArgument('%displayErrorDetails%');
 
-        $this->register('notFoundHandler', NotFound::class);
+        $this->register('notFoundHandler', NotFound::class)
+            ->setPublic(true);
 
-        $this->register('notAllowedHandler', NotAllowed::class);
+        $this->register('notAllowedHandler', NotAllowed::class)
+            ->setPublic(true);
 
         $this->register('callableResolver', CallableResolver::class)
+            ->setPublic(true)
             ->addArgument(new Reference('service_container'));
     }
 }
