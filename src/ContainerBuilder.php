@@ -16,7 +16,7 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
         $this->registerServices($this);
     }
 
-    private function registerServices(self $containerBuilder)
+    private function registerServices(self $containerBuilder): void
     {
         $loader = new XmlFileLoader($containerBuilder, new FileLocator(__DIR__.'/Resources'));
 

@@ -4,6 +4,7 @@ namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
 
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
 use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Fixtures\CustomRouter;
+use PHPUnit\Framework\TestCase;
 use Slim\Http\Response;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
@@ -104,7 +105,7 @@ final class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * Test overriding settings on constructor.
      */
-    public function testOverrideSettings()
+    public function testOverrideSettings(): void
     {
         $container = new ContainerBuilder();
         $container->setParameter('httpVersion', '1.3');
@@ -118,7 +119,7 @@ final class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $container = new ContainerBuilder();
         $loader = new ClosureLoader($container);
-        $loader->load(function (ContainerBuilder $container) {
+        $loader->load(function (ContainerBuilder $container): void {
             $container->register('router', CustomRouter::class);
         });
 
