@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="httpVersion" type="string">1.1</parameter>
+        <parameter key="responseChunkSize">4096</parameter>
+        <parameter key="outputBuffering" type="string">append</parameter>
+        <parameter key="determineRouteBeforeAppMiddleware">false</parameter>
+        <parameter key="displayErrorDetails">false</parameter>
+    </parameters>
+    
+    <services>
+        <service id="settings" class="Slim\Collection" public="true">
+            <argument type="collection">
+                <argument key="httpVersion">%httpVersion%</argument>
+                <argument key="responseChunkSize">%responseChunkSize%</argument>
+                <argument key="outputBuffering">%outputBuffering%</argument>
+                <argument key="determineRouteBeforeAppMiddleware">%determineRouteBeforeAppMiddleware%</argument>
+                <argument key="displayErrorDetails">%displayErrorDetails%</argument>
+            </argument>
+        </service>
+
+        <service id="Slim\Http\Environment" alias="environment" />
+        <service id="environment" class="Slim\Http\Environment" public="true">
+            <factory class="Flexsounds\Component\SymfonyContainerSlimBridge\EnvironmentFactory" method="build" />
+        </service>
+
+        <service id="request" class="Slim\Http\Request" public="true">
+            <factory class="Slim\Http\Request" method="createFromEnvironment" />
+            <argument type="service" id="environment" />
+        </service>
+        <service id="Slim\Http\Request" alias="request"/>
+
+        <service id="router" class="Slim\Router" public="true"/>
+        <service id="Slim\Router" alias="router" />
+
+        <service id="response.headers" class="Slim\Http\Headers">
+            <argument type="collection">
+                <argument key="Content-Type" type="string">text/html; charset=UTF-8</argument>
+            </argument>
+        </service>
+
+        <service id="response" class="Slim\Http\Response" public="true">
+            <argument>200</argument>
+            <argument type="service" id="response.headers"/>
+            <call method="withProtocolVersion">
+                <argument>%httpVersion%</argument>
+            </call>
+        </service>
+        <service id="Slim\Http\Response" alias="response" />
+
+        <service id="foundHandler" class="Slim\Handlers\Strategies\RequestResponse" public="true" />
+        <service id="errorHandler" class="Slim\Handlers\Error" public="true">
+            <argument>%displayErrorDetails%</argument>
+        </service>
+
+        <service id="notFoundHandler" class="Slim\Handlers\NotFound" public="true" />
+        <service id="notAllowedHandler" class="Slim\Handlers\NotAllowed" public="true" />
+        <service id="callableResolver" class="Slim\CallableResolver" public="true">
+            <argument type="service" id="service_container" />
+        </service>
+
+    </services>
+
+</container>

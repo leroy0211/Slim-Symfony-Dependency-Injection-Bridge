@@ -3,27 +3,26 @@
 namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
 
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
-use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Stubs\CustomRouter;
+use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Fixtures\CustomRouter;
+use Slim\Http\Response;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
-/**
- * Class ContainerBuilderTest
- * @package Flexsounds\Component\SymfonyContainerSlimBridge\Tests
- */
-class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
+final class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var ContainerBuilder */
     private $container;
 
     protected function setUp()
     {
-        $container       = new ContainerBuilder();
+        $container = new ContainerBuilder();
         $this->container = $container;
+        $container->compile();
     }
 
     /**
-     * Test if the container is from the Symfony Container Builder instance
+     * Test if the container is from the Symfony Container Builder instance.
      */
     public function testInstanceOfSymfonyContainerBuilder()
     {
@@ -31,7 +30,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test if the container is from the Interop Container Interface, Slim uses
+     * Test if the container is from the Interop Container Interface, Slim uses.
      */
     public function testInstanceOfSlimContainerInterface()
     {
@@ -39,7 +38,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test `get()` returns existing item
+     * Test `get()` returns existing item.
      */
     public function testGet()
     {
@@ -47,17 +46,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test `get()` throws error if item does not exist
-     *
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     */
-    public function testGetWithValueNotFoundError()
-    {
-        $this->container->get('foo');
-    }
-
-    /**
-     * Test container has request
+     * Test container has request.
      */
     public function testGetRequest()
     {
@@ -65,15 +54,21 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test container has response
+     * Test container has response.
      */
     public function testGetResponse()
     {
-        $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $this->container->get('response'));
+        /** @var Response $response */
+        $response = $this->container->get('response');
+
+        $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $response);
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(['text/html; charset=UTF-8'], $response->getHeader('Content-Type'));
     }
 
     /**
-     * Test container has router
+     * Test container has router.
      */
     public function testGetRouter()
     {
@@ -81,7 +76,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test container has error handler
+     * Test container has error handler.
      */
     public function testGetErrorHandler()
     {
@@ -89,7 +84,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test container has error handler
+     * Test container has error handler.
      */
     public function testGetNotAllowedHandler()
     {
@@ -97,7 +92,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test settings can be edited
+     * Test settings can be edited.
      */
     public function testSettingsCanBeEdited()
     {
@@ -107,13 +102,14 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test overriding settings on constructor
+     * Test overriding settings on constructor.
      */
-    public function testOverrideSettingsOnConstruct()
+    public function testOverrideSettings()
     {
-        $container = new ContainerBuilder(new ParameterBag([
-            'httpVersion' => "1.3"
-        ]));
+        $container = new ContainerBuilder();
+        $container->setParameter('httpVersion', '1.3');
+
+        $container->compile();
 
         $this->assertSame('1.3', $container->get('settings')['httpVersion']);
     }
@@ -121,11 +117,23 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     public function testCanOverwriteServicesFromLoaders()
     {
         $container = new ContainerBuilder();
-        $loader    = new ClosureLoader($container);
+        $loader = new ClosureLoader($container);
         $loader->load(function (ContainerBuilder $container) {
             $container->register('router', CustomRouter::class);
         });
 
         $this->assertInstanceOf(CustomRouter::class, $container->get('router'));
+    }
+
+    public function testCanDumpContainer()
+    {
+        try {
+            $dumper = new PhpDumper($this->container);
+
+            $dumper->dump();
+            $this->assertTrue(true);
+        } catch (RuntimeException $exception) {
+            $this->fail('Can not dump container. Error: '.$exception->getMessage());
+        }
     }
 }
