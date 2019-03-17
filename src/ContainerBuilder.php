@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Flexsounds\Component\SymfonyContainerSlimBridge;
 
 use Interop\Container\ContainerInterface;

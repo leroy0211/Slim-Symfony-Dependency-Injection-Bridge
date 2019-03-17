@@ -3,14 +3,14 @@
     "description": "The bridge to use the Symfony Dependency Injection Container to use in Slim Framework 3",
     "type": "library",
     "require": {
-        "php": "^5.5.9 || ^7.0",
+        "php": "^7.1",
         "slim/slim": "^3.1",
-        "symfony/dependency-injection": "^3.0",
-        "symfony/config": "^3.0"
+        "symfony/dependency-injection": "^3.2 || ^4.0",
+        "symfony/config": "^3.2 || ^4.0"
     },
     "require-dev": {
-        "symfony/yaml": "^3.0",
-        "phpunit/phpunit": "^4.8"
+        "symfony/yaml": "^3.2 || ^4.0",
+        "phpunit/phpunit": "^7.0"
     },
     "license": "MIT",
     "authors": [
@@ -22,6 +22,11 @@
     "autoload": {
         "psr-4": {
             "Flexsounds\\Component\\SymfonyContainerSlimBridge\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Flexsounds\\Component\\SymfonyContainerSlimBridge\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "stable"

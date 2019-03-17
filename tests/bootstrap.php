@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Composer\Autoload\ClassLoader $autoloader */
-$autoloader = require realpath(__DIR__.'/../vendor/autoload.php');
+declare(strict_types=1);
 
-$autoloader->addPsr4('Flexsounds\Component\SymfonyContainerSlimBridge\Tests\\', __DIR__);
+/** @var \Composer\Autoload\ClassLoader $autoloader */
+$autoloader = require realpath(__DIR__."/../vendor/autoload.php");
