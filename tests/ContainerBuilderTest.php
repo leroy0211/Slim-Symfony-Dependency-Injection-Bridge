@@ -3,7 +3,7 @@
 namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
 
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
-use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Stubs\CustomRouter;
+use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Fixtures\CustomRouter;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
@@ -44,16 +44,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
-    }
-
-    /**
-     * Test `get()` throws error if item does not exist
-     *
-     * @expectedException \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     */
-    public function testGetWithValueNotFoundError()
-    {
-        $this->container->get('foo');
     }
 
     /**
