@@ -16,6 +16,7 @@ use Slim\Http\Response;
 use Slim\Router;
 use Symfony\Component\DependencyInjection\ContainerBuilder as BaseContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Reference;
 
 class ContainerBuilder extends BaseContainerBuilder implements ContainerInterface
 {
@@ -56,11 +57,14 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
 
         $this->register('request', Request::class)
             ->setFactory([Request::class, 'createFromEnvironment'])
-            ->addArgument($this->get('environment'));
+            ->addArgument(new Reference('environment'));
+
+        $this->register('response.headers', Headers::class)
+            ->addArgument(['Content-Type' => 'text/html; charset=UTF-8']);
 
         $this->register('response', Response::class)
             ->addArgument(200)
-            ->addArgument(new Headers(['Content-Type' => 'text/html; charset=UTF-8']))
+            ->addArgument(new Reference('response.headers'))
             ->addMethodCall('withProtocolVersion', ['%httpVersion%'])
             ;
 
@@ -76,6 +80,6 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
         $this->register('notAllowedHandler', NotAllowed::class);
 
         $this->register('callableResolver', CallableResolver::class)
-            ->addArgument($this);
+            ->addArgument(new Reference('service_container'));
     }
 }

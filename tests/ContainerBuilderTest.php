@@ -4,6 +4,8 @@ namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
 
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
 use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Fixtures\CustomRouter;
+use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
@@ -117,5 +119,17 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertInstanceOf(CustomRouter::class, $container->get('router'));
+    }
+
+    public function testCanDumpContainer()
+    {
+        try {
+            $dumper = new PhpDumper($this->container);
+
+            $dumper->dump();
+            $this->assertTrue(true);
+        } catch (RuntimeException $exception) {
+            $this->fail('Can not dump container. Error: '.$exception->getMessage());
+        }
     }
 }
