@@ -2,7 +2,7 @@
 
 $rules = [
     '@PSR2' => true,
-    'combine_consecutive_issets' => true,
+//    'combine_consecutive_issets' => true,
     'combine_consecutive_unsets' => true,
     'no_extra_blank_lines' => true,
     'no_php4_constructor' => true,
