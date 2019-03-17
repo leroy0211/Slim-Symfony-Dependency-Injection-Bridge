@@ -7,7 +7,6 @@ namespace Flexsounds\Component\SymfonyContainerSlimBridge\Tests;
 use Flexsounds\Component\SymfonyContainerSlimBridge\ContainerBuilder;
 use Flexsounds\Component\SymfonyContainerSlimBridge\Tests\Fixtures\CustomRouter;
 use PHPUnit\Framework\TestCase;
-use Slim\Http\Response;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Loader\ClosureLoader;
@@ -34,68 +33,6 @@ final class ContainerBuilderTest extends TestCase
     public function testInstanceOfSymfonyContainerBuilder(): void
     {
         $this->assertInstanceOf('\Symfony\Component\DependencyInjection\ContainerBuilder', $this->container);
-    }
-
-    /**
-     * Test if the container is from the Interop Container Interface, Slim uses.
-     */
-    public function testInstanceOfSlimContainerInterface(): void
-    {
-        $this->assertInstanceOf('\Interop\Container\ContainerInterface', $this->container);
-    }
-
-    /**
-     * Test `get()` returns existing item.
-     */
-    public function testGet(): void
-    {
-        $this->assertInstanceOf('\Slim\Http\Environment', $this->container->get('environment'));
-    }
-
-    /**
-     * Test container has request.
-     */
-    public function testGetRequest(): void
-    {
-        $this->assertInstanceOf('\Psr\Http\Message\RequestInterface', $this->container->get('request'));
-    }
-
-    /**
-     * Test container has response.
-     */
-    public function testGetResponse(): void
-    {
-        /** @var Response $response */
-        $response = $this->container->get('response');
-
-        $this->assertInstanceOf('\Psr\Http\Message\ResponseInterface', $response);
-
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame(['text/html; charset=UTF-8'], $response->getHeader('Content-Type'));
-    }
-
-    /**
-     * Test container has router.
-     */
-    public function testGetRouter(): void
-    {
-        $this->assertInstanceOf('\Slim\Router', $this->container->get('router'));
-    }
-
-    /**
-     * Test container has error handler.
-     */
-    public function testGetErrorHandler(): void
-    {
-        $this->assertInstanceOf('\Slim\Handlers\Error', $this->container->get('errorHandler'));
-    }
-
-    /**
-     * Test container has error handler.
-     */
-    public function testGetNotAllowedHandler(): void
-    {
-        $this->assertInstanceOf('\Slim\Handlers\NotAllowed', $this->container->get('notAllowedHandler'));
     }
 
     /**
