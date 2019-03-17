@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Flexsounds\Component\SymfonyContainerSlimBridge;
 
 use Interop\Container\ContainerInterface;
@@ -41,7 +43,7 @@ class ContainerBuilder extends BaseContainerBuilder implements ContainerInterfac
         $this->registerDefaultServices();
     }
 
-    private function registerDefaultServices()
+    private function registerDefaultServices(): void
     {
         $this->register('settings', Collection::class)
             ->setPublic(true)
