@@ -1,18 +1,51 @@
 sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 language: php
+
 php:
-    - '7.1'
     - '7.2'
     - '7.3'
+    - '7.4'
+
+matrix:
+    fast_finish: true
+    include:
+        - php: 7.2
+          env: SYMFONY_VERSION=3.4.*
+        - php: 7.3
+          env: SYMFONY_VERSION=3.4.*
+        - php: 7.4
+          env: SYMFONY_VERSION=3.4.*
+        - php: 7.2
+          env: SYMFONY_VERSION=4.4.*
+        - php: 7.3
+          env: SYMFONY_VERSION=4.4.*
+        - php: 7.4
+          env: SYMFONY_VERSION=4.4.*
+        - php: 7.2
+          env: SYMFONY_VERSION=5.0.*
+        - php: 7.3
+          env: SYMFONY_VERSION=5.0.*
+        - php: 7.4
+          env: SYMFONY_VERSION=5.0.*
+
 
 before_install:
     - .travis/before_install.sh
     - export PATH=$PATH:$HOME/.config/composer/vendor/bin:$HOME/.composer/vendor/bin
 
-install:
-    - travis_retry composer self-update
-    - travis_retry composer install --no-interaction --prefer-source
+#install:
+#    - travis_retry composer self-update
+#    - travis_retry composer install --no-interaction --prefer-source
+
+before_script:
+    - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+    - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
 script:
     - php-cs-fixer fix --ansi --verbose --diff --dry-run
-    - vendor/bin/phpunit
+    - ./vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
